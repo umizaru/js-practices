@@ -25,7 +25,7 @@ for (let i = 1; i <= last_day.day; i++) {
 
 let weekday_count = first_day.weekday;
 let spaces = "   ".repeat(weekday_count);
-if (first_day.weekday !== 7) process.stdout.write(spaces);
+if (weekday_count !== 7) process.stdout.write(spaces);
 
 days_of_month.forEach((day) => {
   let str_day = String(day).padStart(2, " ");
