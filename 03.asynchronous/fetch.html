@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>FetchAPI_FBC_Top</title>
+  </head>
+  <body>
+    <script>
+      async function fetchAndLogHTML(url) {
+        try {
+          const response = await fetch(url);
+          const html = await response.text();
+          console.log(html);
+        } catch (error) {
+          console.error("エラーが発生しました:", error);
+        }
+      }
+      fetchAndLogHTML("https://bootcamp.fjord.jp");
+    </script>
+  </body>
+</html>
