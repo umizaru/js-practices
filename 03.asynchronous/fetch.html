@@ -9,10 +9,23 @@
       async function fetchAndLogHTML(url) {
         try {
           const response = await fetch(url);
-          const html = await response.text();
-          console.log(html);
+          if (!response.ok) {
+            if (response.status >= 400 && response.status < 500) {
+              console.error(
+                "クライアントエラーが発生しました: ",
+                response.status
+              );
+            } else if (response.status >= 500) {
+              console.error("サーバーエラーが発生しました: ", response.status);
+            } else {
+              console.error("その他のエラーが発生しました: ", response.status);
+            }
+          } else {
+            const html = await response.text();
+            console.log(html);
+          }
         } catch (error) {
-          console.error("エラーが発生しました:", error);
+          console.error("通信エラーが発生しました: ", error);
         }
       }
       fetchAndLogHTML("https://bootcamp.fjord.jp");
