@@ -6,29 +6,43 @@
   </head>
   <body>
     <script>
-      async function fetchAndLogHTML(url) {
+      async function fetchHTML(url) {
+        const response = await fetch(url);
+        const html = await response.text();
+        console.log(html);
+      }
+      fetchHTML("https://bootcamp.fjord.jp/");
+    </script>
+  </body>
+</html>
+
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>FetchAPI</title>
+  </head>
+  <body>
+    <script>
+      async function fetchHTML(url) {
         try {
           const response = await fetch(url);
           if (!response.ok) {
-            if (response.status >= 400 && response.status < 500) {
-              console.error(
-                "クライアントエラーが発生しました: ",
-                response.status
-              );
-            } else if (response.status >= 500) {
-              console.error("サーバーエラーが発生しました: ", response.status);
-            } else {
-              console.error("その他のエラーが発生しました: ", response.status);
+            if (response.status >= 400 && response.status < 600) {
+              throw new Error(`Network error: ${response.status}`);
             }
-          } else {
-            const html = await response.text();
-            console.log(html);
           }
+          const html = await response.text();
+          console.log(html);
         } catch (error) {
-          console.error("通信エラーが発生しました: ", error);
+          if (error.message.startsWith("Network error")) {
+            console.error("ネットワークエラーが発生しました。", error);
+          } else {
+            throw error;
+          }
         }
       }
-      fetchAndLogHTML("https://bootcamp.fjord.jp");
+      fetchHTML("https://bootcamp.fjord.jp/");
     </script>
   </body>
 </html>
