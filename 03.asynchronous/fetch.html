@@ -7,36 +7,13 @@
   <body>
     <script>
       async function fetchHTML(url) {
-        const response = await fetch(url);
-        const html = await response.text();
-        console.log(html);
-      }
-      fetchHTML("https://bootcamp.fjord.jp/");
-    </script>
-  </body>
-</html>
-
-<!DOCTYPE html>
-<html lang="ja">
-  <head>
-    <meta charset="UTF-8" />
-    <title>FetchAPI</title>
-  </head>
-  <body>
-    <script>
-      async function fetchHTML(url) {
         try {
           const response = await fetch(url);
-          if (!response.ok) {
-            if (response.status >= 400 && response.status < 600) {
-              throw new Error(`Network error: ${response.status}`);
-            }
-          }
           const html = await response.text();
           console.log(html);
         } catch (error) {
-          if (error.message.startsWith("Network error")) {
-            console.error("ネットワークエラーが発生しました。", error);
+          if (error instanceof TypeError) {
+            console.error("ネットワークエラーが発生しました:", error);
           } else {
             throw error;
           }
