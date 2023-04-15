@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>FetchAPI</title>
+  </head>
+  <body>
+    <script>
+      async function fetchHTML(url) {
+        try {
+          const response = await fetch(url);
+          const html = await response.text();
+          console.log(html);
+        } catch (error) {
+          if (error instanceof TypeError) {
+            console.error("ネットワークエラーが発生しました:", error);
+          } else {
+            throw error;
+          }
+        }
+      }
+      fetchHTML("https://bootcamp.fjord.jp/");
+    </script>
+  </body>
+</html>
