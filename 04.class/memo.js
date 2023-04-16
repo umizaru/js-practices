@@ -1,6 +1,7 @@
 // ...
 const readline = require("readline");
 const fs = require("fs");
+const { v4: uuidv4 } = require("uuid");
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -19,11 +20,13 @@ rl.on("line", (input) => {
 
   const jsoncontent = JSON.stringify(memo);
 
-  fs.writeFile("./data.json", jsoncontent, "utf8", (err) => {
+  const uniqueid = uuidv4();
+  const filename = `./data/memo_${uniqueid}.json`;
+  fs.writeFile(filename, jsoncontent, "utf8", (err) => {
     if (err) {
       console.error("ファイルの保存に失敗しました:", err);
     } else {
-      console.log("メモがJSON形式でファイルに保存されました");
+      console.log("ファイの保存に成功しました");
     }
     rl.close();
   });
