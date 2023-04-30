@@ -1,7 +1,7 @@
 const readline = require("readline");
 const fs = require("fs");
 
-const saveInputToJson = async () => {
+const saveMemos = async () => {
   try {
     const inputText = await readInput();
     await appendMemo(inputText);
@@ -40,4 +40,4 @@ const appendMemo = async (memoText) => {
   });
 };
 
-saveInputToJson();
+saveMemos();
