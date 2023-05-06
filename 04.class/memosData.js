@@ -9,11 +9,11 @@ class memosData {
       const emptyMemoData = JSON.stringify({ memos: [] });
       fs.writeFileSync(this.path, emptyMemoData);
     }
-    const jsonData = fs.readFileSync(this.path, "utf-8");
-    return JSON.parse(jsonData);
+    const memoData = fs.readFileSync(this.path, "utf-8");
+    return JSON.parse(memoData);
   }
-  write(memoList, callback) {
-    const updatedJsonData = JSON.stringify(memoList);
+  write(memoData, callback) {
+    const updatedJsonData = JSON.stringify(memoData);
     fs.writeFile(this.path, updatedJsonData, callback);
   }
 }

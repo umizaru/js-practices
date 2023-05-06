@@ -11,9 +11,9 @@ class MemosController {
 
   async append() {
     const inputText = await this.inputReader.read();
-    const memoList = this.jsonFile.read();
-    memoList.memos.push({ memo: inputText });
-    await this.jsonFile.write(memoList, (err) => {
+    const memoData = this.jsonFile.read();
+    memoData.memos.push({ memo: inputText });
+    await this.jsonFile.write(memoData, (err) => {
       if (err) {
         console.error(err);
         return;
@@ -23,20 +23,20 @@ class MemosController {
   }
 
   async list() {
-    const memoList = this.jsonFile.read();
-    if (memoList.memos.length === 0) {
+    const memoData = this.jsonFile.read();
+    if (memoData.memos.length === 0) {
       console.log("メモがありません");
       return;
     }
-    memoList.memos.forEach((memo) => {
+    memoData.memos.forEach((memo) => {
       const memosArray = memo.memo.split("\n");
       console.log(memosArray[0]);
     });
   }
 
   async refer() {
-    const memoList = this.jsonFile.read();
-    const choices = memoList.memos.map((memo) => memo.memo.split("\n")[0]);
+    const memoData = this.jsonFile.read();
+    const choices = memoData.memos.map((memo) => memo.memo.split("\n")[0]);
     if (choices.length === 0) {
       console.log("メモがありません");
       return;
@@ -47,15 +47,15 @@ class MemosController {
       message: "Choose a note you want to see:",
       choices,
     });
-    const selectedMemo = memoList.memos.find(
+    const selectedMemo = memoData.memos.find(
       (memo) => memo.memo.split("\n")[0] === answer.selectedMemo
     );
     console.log(selectedMemo.memo);
   }
 
   async delete() {
-    const memoList = this.jsonFile.read();
-    const choices = memoList.memos.map((memo) => memo.memo.split("\n")[0]);
+    const memoData = this.jsonFile.read();
+    const choices = memoData.memos.map((memo) => memo.memo.split("\n")[0]);
     if (choices.length === 0) {
       console.log("メモがありません");
       return;
@@ -67,14 +67,14 @@ class MemosController {
       choices,
     });
 
-    const selectedMemo = memoList.memos.find(
+    const selectedMemo = memoData.memos.find(
       (memo) => memo.memo.split("\n")[0] === answer.selectedMemo
     );
 
-    memoList.memos = memoList.memos.filter(
+    memoData.memos = memoData.memos.filter(
       (memo) => memo.memo.split("\n")[0] !== selectedMemo.memo.split("\n")[0]
     );
-    this.jsonFile.write(memoList, (err) => {
+    this.jsonFile.write(memoData, (err) => {
       if (err) {
         console.error(err);
         return;
