@@ -1,22 +1,23 @@
 const MemosController = require("./memosController.js");
 
 class Commander {
-  constructor(option, path) {
+  constructor(option, memoFilePath) {
     this.option = option;
-    this.path = path;
+    this.path = memoFilePath;
+    this.controller = new MemosController(this.path);
   }
 
   run() {
     if (this.option.l) {
-      return new MemosController(this.path).list();
+      this.controller.list();
     }
     if (this.option.r) {
-      return new MemosController(this.path).refer();
+      this.controller.refer();
     }
     if (this.option.d) {
-      return new MemosController(this.path).delete();
+      this.controller.delete();
     }
-    return new MemosController(this.path).append();
+    this.controller.append();
   }
 }
 
