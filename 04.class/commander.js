@@ -1,4 +1,4 @@
-const MemosController = require("./MemosController.js");
+const MemosController = require("./memosController.js");
 
 class Commander {
   constructor(option, path) {

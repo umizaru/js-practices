@@ -29,8 +29,9 @@ class MemosController {
       return;
     }
     memoData.memos.forEach((memo) => {
-      const memosArray = memo.memo.split("\n");
-      console.log(memosArray[0]);
+      const memoArray = memo.memo.split("\n");
+      console.log(memoArray);
+      console.log(memoArray[0]);
     });
   }
 
@@ -44,7 +45,7 @@ class MemosController {
     const answer = await prompt({
       type: "select",
       name: "selectedMemo",
-      message: "Choose a note you want to see:",
+      message: "Choose a memo you want to see:",
       choices,
     });
     const selectedMemo = memoData.memos.find(
@@ -63,7 +64,7 @@ class MemosController {
     const answer = await prompt({
       type: "select",
       name: "selectedMemo",
-      message: "Choose a note you want to delete:",
+      message: "Choose a memo you want to delete:",
       choices,
     });
 

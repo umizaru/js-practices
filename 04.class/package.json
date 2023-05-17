@@ -19,8 +19,6 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "enquirer": "^2.3.6",
-    "uuid": "^9.0.0",
-    "yargs": "^17.7.1"
+    "enquirer": "^2.3.6"
   }
 }
