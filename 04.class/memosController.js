@@ -1,19 +1,19 @@
-const JsonFile = require("./memosData.js");
+const memosData = require("./memosData.js");
 const InputReader = require("./inputReader.js");
 
 const { prompt } = require("enquirer");
 
 class MemosController {
   constructor(path) {
-    this.jsonFile = new JsonFile(path);
+    this.memosData = new memosData(path);
     this.inputReader = new InputReader();
   }
 
   async append() {
     const inputText = await this.inputReader.read();
-    const memoData = this.jsonFile.read();
+    const memoData = this.memosData.read();
     memoData.memos.push({ memo: inputText });
-    await this.jsonFile.write(memoData, (err) => {
+    await this.memosData.write(memoData, (err) => {
       if (err) {
         console.error(err);
         return;
@@ -22,23 +22,22 @@ class MemosController {
     });
   }
 
-  async list() {
-    const memoData = this.jsonFile.read();
+  list() {
+    const memoData = this.memosData.read();
     if (memoData.memos.length === 0) {
       console.log("メモがありません");
       return;
     }
     memoData.memos.forEach((memo) => {
-      const memoArray = memo.memo.split("\n");
-      console.log(memoArray);
-      console.log(memoArray[0]);
+      const memosList = memo.memo.split("\n");
+      console.log(memosList[0]);
     });
   }
 
   async refer() {
-    const memoData = this.jsonFile.read();
-    const choices = memoData.memos.map((memo) => memo.memo.split("\n")[0]);
-    if (choices.length === 0) {
+    const memoData = this.memosData.read();
+    const memoTitles = memoData.memos.map((memo) => memo.memo.split("\n")[0]);
+    if (memoTitles.length === 0) {
       console.log("メモがありません");
       return;
     }
@@ -46,7 +45,7 @@ class MemosController {
       type: "select",
       name: "selectedMemo",
       message: "Choose a memo you want to see:",
-      choices,
+      choices: memoTitles,
     });
     const selectedMemo = memoData.memos.find(
       (memo) => memo.memo.split("\n")[0] === answer.selectedMemo
@@ -55,9 +54,9 @@ class MemosController {
   }
 
   async delete() {
-    const memoData = this.jsonFile.read();
-    const choices = memoData.memos.map((memo) => memo.memo.split("\n")[0]);
-    if (choices.length === 0) {
+    const memoData = this.memosData.read();
+    const memoTitles = memoData.memos.map((memo) => memo.memo.split("\n")[0]);
+    if (memoTitles.length === 0) {
       console.log("メモがありません");
       return;
     }
@@ -65,7 +64,7 @@ class MemosController {
       type: "select",
       name: "selectedMemo",
       message: "Choose a memo you want to delete:",
-      choices,
+      choices: memoTitles,
     });
 
     const selectedMemo = memoData.memos.find(
@@ -75,7 +74,7 @@ class MemosController {
     memoData.memos = memoData.memos.filter(
       (memo) => memo.memo.split("\n")[0] !== selectedMemo.memo.split("\n")[0]
     );
-    this.jsonFile.write(memoData, (err) => {
+    this.memosData.write(memoData, (err) => {
       if (err) {
         console.error(err);
         return;
