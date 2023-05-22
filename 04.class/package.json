@@ -13,6 +13,7 @@
   "bin": {
     "memo.js": "memo.js"
   },
+  "type": "module",
   "main": "memo.js",
   "keywords": [],
   "author": "",

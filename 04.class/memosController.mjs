@@ -1,7 +1,7 @@
-const memosData = require("./memosData.js");
-const InputReader = require("./inputReader.js");
-
-const { prompt } = require("enquirer");
+import memosData from "./memosData.mjs";
+import InputReader from "./inputReader.mjs";
+import pkg from "enquirer";
+const { prompt } = pkg;
 
 class MemosController {
   constructor(path) {
@@ -14,15 +14,7 @@ class MemosController {
       const inputText = await this.inputReader.read();
       const memoData = await this.memosData.read();
       memoData.memos.push({ memo: inputText });
-      await new Promise((resolve, reject) => {
-        this.memosData.write(memoData, (err) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve();
-          }
-        });
-      });
+      await this.memosData.write(memoData);
       console.log("---書き込みが完了しました---");
     } catch (err) {
       console.error(err);
@@ -42,7 +34,7 @@ class MemosController {
   }
 
   async getMemoDataAndTitles(memosData, message) {
-    const memoData = memosData.read();
+    const memoData = await memosData.read();
     const memoTitles = memoData.memos.map((memo) => memo.memo.split("\n")[0]);
     if (memoTitles.length === 0) {
       console.log("メモがありません");
@@ -80,15 +72,7 @@ class MemosController {
       (memo) => memo.memo.split("\n")[0] !== selectedMemo.memo.split("\n")[0]
     );
     try {
-      await new Promise((resolve, reject) => {
-        this.memosData.write(memoData, (err) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve();
-          }
-        });
-      });
+      await this.memosData.write(memoData);
       console.log("---削除が完了しました---");
     } catch (err) {
       console.error(err);
@@ -96,4 +80,4 @@ class MemosController {
   }
 }
 
-module.exports = MemosController;
+export default MemosController;

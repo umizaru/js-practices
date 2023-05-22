@@ -1,4 +1,4 @@
-const MemosController = require("./memosController.js");
+import MemosController from "./memosController.mjs";
 
 class Commander {
   constructor(option, memoFilePath) {
@@ -21,4 +21,4 @@ class Commander {
   }
 }
 
-module.exports = Commander;
+export default Commander;

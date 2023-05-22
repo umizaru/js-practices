@@ -1,4 +1,4 @@
-const fs = require("fs");
+import fs from "fs";
 
 class MemosData {
   constructor(memoFilePath) {
@@ -19,5 +19,4 @@ class MemosData {
     fs.writeFile(this.path, updatedJsonData, callback);
   }
 }
-
-module.exports = MemosData;
+export default MemosData;

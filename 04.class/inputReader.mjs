@@ -1,4 +1,4 @@
-const readline = require("readline");
+import readline from "readline";
 
 class InputReader {
   read() {
@@ -19,5 +19,4 @@ class InputReader {
     });
   }
 }
-
-module.exports = InputReader;
+export default InputReader;
