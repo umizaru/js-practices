@@ -21,16 +21,20 @@ class MemosController {
     }
   }
 
-  list() {
-    const memoData = this.memosData.read();
-    if (memoData.memos.length === 0) {
-      console.log("メモがありません");
-      return;
+  async list() {
+    try {
+      const memoData = await this.memosData.read();
+      if (memoData.memos.length === 0) {
+        console.log("メモがありません");
+        return;
+      }
+      memoData.memos.forEach((memo) => {
+        const memosList = memo.memo.split("\n");
+        console.log(memosList[0]);
+      });
+    } catch (err) {
+      console.error(err);
     }
-    memoData.memos.forEach((memo) => {
-      const memosList = memo.memo.split("\n");
-      console.log(memosList[0]);
-    });
   }
 
   async getMemoDataAndTitles(memosData, message) {

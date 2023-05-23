@@ -19,4 +19,5 @@ class InputReader {
     });
   }
 }
+
 export default InputReader;

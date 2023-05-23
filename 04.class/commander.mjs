@@ -10,14 +10,13 @@ class Commander {
   run() {
     if (this.option.l) {
       this.controller.list();
-    }
-    if (this.option.r) {
+    } else if (this.option.r) {
       this.controller.refer();
-    }
-    if (this.option.d) {
+    } else if (this.option.d) {
       this.controller.delete();
+    } else {
+      this.controller.append();
     }
-    this.controller.append();
   }
 }
 
