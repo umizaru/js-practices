@@ -20,8 +20,8 @@ class MemosData {
   }
 
   write(memoData) {
-    const updatedJsonData = JSON.stringify(memoData);
-    fs.writeFileSync(this.path, updatedJsonData);
+    const memoDataJSON = JSON.stringify(memoData);
+    fs.writeFileSync(this.path, memoDataJSON);
   }
 }
 export default MemosData;
