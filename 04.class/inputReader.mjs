@@ -1,18 +1,16 @@
 import readline from "readline";
-
 class InputReader {
   read() {
-    const rl = readline.createInterface({
+    const input = readline.createInterface({
       input: process.stdin,
       output: process.stdout,
     });
-    return new Promise((resolve) => {
-      const lines = [];
-      rl.on("line", (line) => lines.push(line));
-      rl.on("close", () => {
+    return new Promise((resolve, reject) => {
+      let lines = [];
+      input.on("line", (line) => lines.push(line));
+      input.on("close", () => {
         if (lines.length === 0) {
-          console.log("文字を入力してください");
-          process.exit(1);
+          reject(console.error("文字を入力してください"));
         }
         resolve(lines.join("\n"));
       });

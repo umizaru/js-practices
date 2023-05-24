@@ -17,7 +17,7 @@ class MemosController {
       await this.memosData.write(memoData);
       console.log("---書き込みが完了しました---");
     } catch (err) {
-      console.error(err);
+      process.exit(1);
     }
   }
 

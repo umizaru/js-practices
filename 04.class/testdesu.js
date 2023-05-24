@@ -1,13 +1,22 @@
-class MyClass {
-  myMethod() {
-    // メソッドのロジック
-    this.someFunction();
-  }
+// resolve と reject の使い方のサンプル
 
-  someFunction() {
-    console.log("Hello, World!");
-    // 切り出された関数のロジック
-  }
+// ランダムな数値を生成する非同期関数
+function generateRandomNumber() {
+  return new Promise((resolve, reject) => {
+    const randomNumber = Math.random();
+    if (randomNumber > 0.5) {
+      resolve(randomNumber);
+    } else {
+      reject(new Error("ランダムな数値が閾値未満です"));
+    }
+  });
 }
-const test = new MyClass();
-test.myMethod();
+
+// 使用例
+generateRandomNumber()
+  .then((result) => {
+    console.log("成功:", result);
+  })
+  .catch((error) => {
+    console.error("エラー:", error.message);
+  });
