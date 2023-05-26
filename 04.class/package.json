@@ -20,6 +20,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "enquirer": "^2.3.6"
+    "enquirer": "^2.3.6",
+    "minimist": "^1.2.8"
   }
 }
