@@ -1,4 +1,5 @@
 import readline from "readline";
+
 class InputReader {
   read() {
     const rlInterface = readline.createInterface({
@@ -6,7 +7,7 @@ class InputReader {
       output: process.stdout,
     });
     return new Promise((resolve, reject) => {
-      let lines = [];
+      const lines = [];
       rlInterface.on("line", (line) => lines.push(line));
       rlInterface.on("close", () => {
         if (lines.length === 0) {

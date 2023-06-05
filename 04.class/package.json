@@ -21,6 +21,7 @@
   "description": "",
   "dependencies": {
     "enquirer": "^2.3.6",
-    "minimist": "^1.2.8"
+    "minimist": "^1.2.8",
+    "uuidv4": "^6.2.13"
   }
 }

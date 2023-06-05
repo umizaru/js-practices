@@ -1,4 +1,4 @@
-import MemosController from "./memosController.mjs";
+import MemosController from "./memosController.js";
 
 class Commander {
   constructor(option, memoFilePath) {

@@ -1,7 +1,8 @@
 #!/usr/bin/env node
-import Commander from "./commander.mjs";
-import minimist from "minimist";
+
 import path from "path";
+import minimist from "minimist";
+import Commander from "./commander.js";
 
 const option = minimist(process.argv);
 const memoFilePath = path.resolve("data", "memos.json");

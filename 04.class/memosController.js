@@ -1,19 +1,24 @@
-import memosData from "./memosData.mjs";
-import InputReader from "./inputReader.mjs";
 import pkg from "enquirer";
 const { prompt } = pkg;
+import { v4 as uuidv4 } from "uuid";
+import InputReader from "./inputReader.js";
+import memosData from "./memosData.js";
 
 class MemosController {
   constructor(path) {
-    this.memosData = new memosData(path);
     this.inputReader = new InputReader();
+    this.memosData = new memosData(path);
   }
 
   async append() {
     try {
       const inputText = await this.inputReader.read();
       const memoData = await this.memosData.read();
-      memoData.memos.push({ memo: inputText });
+      const newMemo = {
+        id: uuidv4(),
+        memo: inputText,
+      };
+      memoData.memos.push(newMemo);
       await this.memosData.write(memoData);
       console.log("---書き込みが完了しました---");
     } catch (err) {
@@ -85,3 +90,7 @@ class MemosController {
 }
 
 export default MemosController;
+
+// 以下デバッグ用
+import path from "path";
+new MemosController(path.resolve("data", "memos.json"));
