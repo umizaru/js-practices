@@ -9,9 +9,9 @@ class InputReader {
     return new Promise((resolve, reject) => {
       const lines = [];
       rlInterface.on("line", (line) => lines.push(line));
-      rlInterface.on("close", () => {
+      rlInterface.on("close", (error) => {
         if (lines.length === 0) {
-          reject(console.error("文字を入力してください"));
+          reject(error);
         }
         resolve(lines.join("\n"));
       });

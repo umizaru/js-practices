@@ -1,18 +1,16 @@
-import fs from "fs";
-import { readFile } from "node:fs/promises";
-
+import fs from "fs/promises";
 class MemosData {
   constructor(memoFilePath) {
     this.path = memoFilePath;
   }
 
   async read() {
-    if (!fs.existsSync(this.path)) {
+    if (fs.access(this.path).catch(() => false)) {
       const emptyMemoData = JSON.stringify({ memos: [] });
-      fs.writeFileSync(this.path, emptyMemoData);
+      fs.writeFile(this.path, emptyMemoData);
     }
     try {
-      const memoData = await readFile(this.path, "utf-8");
+      const memoData = await fs.readFile(this.path, "utf-8");
       return JSON.parse(memoData);
     } catch (err) {
       console.error(err);
@@ -21,7 +19,7 @@ class MemosData {
 
   write(memoData) {
     const memoDataJSON = JSON.stringify(memoData);
-    fs.writeFileSync(this.path, memoDataJSON);
+    fs.writeFile(this.path, memoDataJSON);
   }
 }
 export default MemosData;
