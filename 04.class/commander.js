@@ -1,9 +1,9 @@
 import MemosController from "./memosController.js";
 
 class Commander {
-  constructor(option, memoFilePath) {
+  constructor(option) {
     this.option = option;
-    this.path = memoFilePath;
+    this.path = "data/memos.json";
     this.controller = new MemosController(this.path);
   }
 
