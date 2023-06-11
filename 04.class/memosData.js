@@ -5,7 +5,7 @@ class MemosData {
   }
 
   async read() {
-    if (fs.access(this.path).catch(() => false)) {
+    if (!fs.stat(this.path)) {
       const emptyMemoData = JSON.stringify({ memos: [] });
       fs.writeFile(this.path, emptyMemoData);
     }

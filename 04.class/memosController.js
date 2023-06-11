@@ -9,7 +9,7 @@ class MemosController {
     this.memosData = new memosData(path);
   }
 
-  async input() {
+  async #inputRead() {
     try {
       const inputText = await this.inputReader.read();
       const newMemo = {
@@ -24,7 +24,7 @@ class MemosController {
 
   async append() {
     const memoData = await this.memosData.read();
-    const newMemo = await this.input();
+    const newMemo = await this.#inputRead();
     memoData.memos.push(newMemo);
     this.memosData.write(memoData);
     console.log("---書き込みが完了しました---");
@@ -34,7 +34,6 @@ class MemosController {
     const memoData = await this.memosData.read();
     if (memoData.memos.length === 0) {
       console.log("メモがありません");
-      return;
     }
     memoData.memos.forEach((memo) => {
       const memosList = memo.memo.split("\n");
@@ -42,8 +41,8 @@ class MemosController {
     });
   }
 
-  async refer() {
-    const memoData = await this.memosData.read();
+  async #getMemo(memosData) {
+    const memoData = await memosData.read();
     const memoTitles = memoData.memos.map((memo) => {
       return {
         name: memo.memo.split("\n")[0],
@@ -52,8 +51,12 @@ class MemosController {
     });
     if (memoData.memos.length === 0) {
       console.log("メモがありません");
-      return;
     }
+    return memoTitles;
+  }
+
+  async refer() {
+    const memoTitles = await this.#getMemo(this.memosData);
     const prompt = new Select({
       type: "select",
       name: "value",
@@ -69,16 +72,7 @@ class MemosController {
 
   async delete() {
     const memoData = await this.memosData.read();
-    const memoTitles = memoData.memos.map((memo) => {
-      return {
-        name: memo.memo.split("\n")[0],
-        body: memo.memo,
-      };
-    });
-    if (memoData.memos.length === 0) {
-      console.log("メモがありません");
-      return;
-    }
+    const memoTitles = await this.#getMemo(this.memosData);
     const prompt = new Select({
       type: "select",
       name: "value",
@@ -95,4 +89,5 @@ class MemosController {
     console.log("---削除が完了しました---");
   }
 }
+
 export default MemosController;
