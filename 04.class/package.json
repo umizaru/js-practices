@@ -11,6 +11,7 @@
   "type": "module",
   "dependencies": {
     "enquirer": "^2.3.6",
+    "fs.promises.exists": "^1.1.4",
     "minimist": "^1.2.8"
   }
 }

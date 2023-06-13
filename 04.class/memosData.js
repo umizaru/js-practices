@@ -1,11 +1,13 @@
 import fs from "fs/promises";
+import fsExists from "fs.promises.exists";
+
 class MemosData {
   constructor() {
     this.memofilepath = "data/memos.json";
   }
 
   async read() {
-    if (!fs.stat(this.memofilepath)) {
+    if (!(await fsExists(this.memofilepath))) {
       const emptyMemoData = JSON.stringify({ memos: [] });
       fs.writeFile(this.memofilepath, emptyMemoData);
     }
