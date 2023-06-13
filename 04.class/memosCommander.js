@@ -1,10 +1,9 @@
 import MemosController from "./memosController.js";
 
-class Commander {
+class MemosCommander {
   constructor(option) {
     this.option = option;
-    this.path = "data/memos.json";
-    this.controller = new MemosController(this.path);
+    this.controller = new MemosController();
   }
 
   run() {
@@ -20,4 +19,4 @@ class Commander {
   }
 }
 
-export default Commander;
+export default MemosCommander;

@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 import minimist from "minimist";
-import Commander from "./commander.js";
+import MemosCommander from "./memosCommander.js";
 
 const option = minimist(process.argv);
-const commander = new Commander(option);
+const commander = new MemosCommander(option);
 commander.run();

@@ -1,25 +1,21 @@
 import fs from "fs/promises";
 class MemosData {
-  constructor(memoFilePath) {
-    this.path = memoFilePath;
+  constructor() {
+    this.memofilepath = "data/memos.json";
   }
 
   async read() {
-    if (!fs.stat(this.path)) {
+    if (!fs.stat(this.memofilepath)) {
       const emptyMemoData = JSON.stringify({ memos: [] });
-      fs.writeFile(this.path, emptyMemoData);
+      fs.writeFile(this.memofilepath, emptyMemoData);
     }
-    try {
-      const memoData = await fs.readFile(this.path, "utf-8");
-      return JSON.parse(memoData);
-    } catch (err) {
-      console.error(err);
-    }
+    const memoData = await fs.readFile(this.memofilepath, "utf-8");
+    return JSON.parse(memoData);
   }
 
   write(memoData) {
     const memoDataJSON = JSON.stringify(memoData);
-    fs.writeFile(this.path, memoDataJSON);
+    fs.writeFile(this.memofilepath, memoDataJSON);
   }
 }
 export default MemosData;

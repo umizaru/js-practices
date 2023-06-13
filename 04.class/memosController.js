@@ -1,12 +1,12 @@
 import pkg from "enquirer";
 const { Select } = pkg;
 import InputReader from "./inputReader.js";
-import memosData from "./memosData.js";
+import MemosData from "./memosData.js";
 
 class MemosController {
-  constructor(path) {
+  constructor() {
     this.inputReader = new InputReader();
-    this.memosData = new memosData(path);
+    this.memosData = new MemosData();
   }
 
   async #inputRead() {
@@ -33,7 +33,7 @@ class MemosController {
   async list() {
     const memoData = await this.memosData.read();
     if (memoData.memos.length === 0) {
-      console.log("メモがありません");
+      throw new Error("メモがありません");
     }
     memoData.memos.forEach((memo) => {
       const memosList = memo.memo.split("\n");
@@ -50,7 +50,7 @@ class MemosController {
       };
     });
     if (memoData.memos.length === 0) {
-      console.log("メモがありません");
+      throw new Error("メモがありません");
     }
     return memoTitles;
   }
@@ -79,11 +79,11 @@ class MemosController {
       message: "Choose a memo you want to delete:",
       choices: memoTitles,
       result() {
-        let number = this.index;
+        const number = this.index;
         return number;
       },
     });
-    let number = await prompt.run();
+    const number = await prompt.run();
     memoData.memos.splice(number, 1);
     this.memosData.write(memoData);
     console.log("---削除が完了しました---");
