@@ -1,5 +1,4 @@
-import fs from "fs/promises";
-import fsExists from "fs.promises.exists";
+import { promises as fs } from "fs";
 
 class MemosData {
   constructor() {
@@ -7,17 +6,26 @@ class MemosData {
   }
 
   async read() {
-    if (!(await fsExists(this.memofilepath))) {
-      const emptyMemoData = JSON.stringify({ memos: [] });
-      fs.writeFile(this.memofilepath, emptyMemoData);
+    try {
+      const memoData = await fs.readFile(this.memofilepath, "utf-8");
+      return JSON.parse(memoData);
+    } catch (error) {
+      if (error.code === "ENOENT") {
+        await this.#createEmptyData();
+        return { memos: [] };
+      }
     }
-    const memoData = await fs.readFile(this.memofilepath, "utf-8");
-    return JSON.parse(memoData);
   }
 
-  write(memoData) {
+  async #createEmptyData() {
+    const emptyDataJSON = JSON.stringify({ memos: [] });
+    await fs.writeFile(this.memofilepath, emptyDataJSON);
+  }
+
+  async write(memoData) {
     const memoDataJSON = JSON.stringify(memoData);
-    fs.writeFile(this.memofilepath, memoDataJSON);
+    await fs.writeFile(this.memofilepath, memoDataJSON);
   }
 }
+
 export default MemosData;
