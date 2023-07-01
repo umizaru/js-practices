@@ -1,5 +1,4 @@
 import { promises as fs } from "fs";
-
 class MemosData {
   constructor() {
     this.memofilepath = "data/memos.json";

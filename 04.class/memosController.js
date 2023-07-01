@@ -1,5 +1,4 @@
-import pkg from "enquirer";
-const { Select } = pkg;
+import enquirer from "enquirer";
 import InputReader from "./inputReader.js";
 import MemosData from "./memosData.js";
 
@@ -9,31 +8,10 @@ class MemosController {
     this.memosData = new MemosData();
   }
 
-  async #inputRead() {
-    try {
-      const inputText = await this.inputReader.read();
-      const newMemo = {
-        memo: inputText,
-      };
-      return newMemo;
-    } catch (err) {
-      console.error("文字を入力してください");
-      process.exit(1);
-    }
-  }
-
-  async append() {
-    const memoData = await this.memosData.read();
-    const newMemo = await this.#inputRead();
-    memoData.memos.push(newMemo);
-    this.memosData.write(memoData);
-    console.log("---書き込みが完了しました---");
-  }
-
   async list() {
     const memoData = await this.memosData.read();
     if (memoData.memos.length === 0) {
-      throw new Error("メモがありません");
+      console.log("メモがありません");
     }
     memoData.memos.forEach((memo) => {
       const memosList = memo.memo.split("\n");
@@ -41,22 +19,9 @@ class MemosController {
     });
   }
 
-  async #getMemo(memosData) {
-    const memoData = await memosData.read();
-    const memoTitles = memoData.memos.map((memo) => {
-      return {
-        name: memo.memo.split("\n")[0],
-        body: memo.memo,
-      };
-    });
-    if (memoData.memos.length === 0) {
-      throw new Error("メモがありません");
-    }
-    return memoTitles;
-  }
-
   async refer() {
     const memoTitles = await this.#getMemo(this.memosData);
+    const { Select } = enquirer;
     const prompt = new Select({
       type: "select",
       name: "value",
@@ -73,6 +38,8 @@ class MemosController {
   async delete() {
     const memoData = await this.memosData.read();
     const memoTitles = await this.#getMemo(this.memosData);
+
+    const { Select } = enquirer;
     const prompt = new Select({
       type: "select",
       name: "value",
@@ -83,10 +50,46 @@ class MemosController {
         return number;
       },
     });
+
     const number = await prompt.run();
     memoData.memos.splice(number, 1);
     this.memosData.write(memoData);
     console.log("---削除が完了しました---");
+  }
+
+  async append() {
+    const memoData = await this.memosData.read();
+    const newMemo = await this.#inputRead();
+    memoData.memos.push(newMemo);
+    this.memosData.write(memoData);
+    console.log("---書き込みが完了しました---");
+  }
+
+  async #inputRead() {
+    try {
+      const inputText = await this.inputReader.read();
+      const newMemo = {
+        memo: inputText,
+      };
+      return newMemo;
+    } catch (err) {
+      console.error("文字を入力してください");
+      process.exit(1);
+    }
+  }
+
+  async #getMemo(memosData) {
+    const memoData = await memosData.read();
+    const memoTitles = memoData.memos.map((memo) => {
+      return {
+        name: memo.memo.split("\n")[0],
+        body: memo.memo,
+      };
+    });
+    if (memoData.memos.length === 0) {
+      throw new Error("メモがありません");
+    }
+    return memoTitles;
   }
 }
 
