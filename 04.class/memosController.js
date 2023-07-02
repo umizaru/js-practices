@@ -20,39 +20,40 @@ class MemosController {
   }
 
   async refer() {
-    const memoTitles = await this.#getMemo(this.memosData);
+    const memosList = await this.#getMemos(this.memosData);
+
     const { Select } = enquirer;
     const prompt = new Select({
       type: "select",
       name: "value",
       message: "Choose a memo you want to see:",
-      choices: memoTitles,
+      choices: memosList,
       result() {
         return this.focused.body;
       },
     });
-    const memoText = await prompt.run();
-    console.log(memoText);
+
+    const memoBody = await prompt.run();
+    console.log(memoBody);
   }
 
   async delete() {
     const memoData = await this.memosData.read();
-    const memoTitles = await this.#getMemo(this.memosData);
+    const memosList = await this.#getMemos(this.memosData);
 
     const { Select } = enquirer;
     const prompt = new Select({
       type: "select",
       name: "value",
       message: "Choose a memo you want to delete:",
-      choices: memoTitles,
+      choices: memosList,
       result() {
-        const number = this.index;
-        return number;
+        return this.index;
       },
     });
 
-    const number = await prompt.run();
-    memoData.memos.splice(number, 1);
+    const selectedIndex = await prompt.run();
+    memoData.memos.splice(selectedIndex, 1);
     this.memosData.write(memoData);
     console.log("---削除が完了しました---");
   }
@@ -68,28 +69,32 @@ class MemosController {
   async #inputRead() {
     try {
       const inputText = await this.inputReader.read();
+      if (inputText.replace(/\s/g, "") === "") {
+        console.error("文字を入力してください");
+        process.exit(1);
+      }
       const newMemo = {
         memo: inputText,
       };
       return newMemo;
-    } catch (err) {
-      console.error("文字を入力してください");
-      process.exit(1);
+    } catch (error) {
+      console.error("予期しないエラーが発生しました");
+      throw error;
     }
   }
 
-  async #getMemo(memosData) {
+  async #getMemos(memosData) {
     const memoData = await memosData.read();
-    const memoTitles = memoData.memos.map((memo) => {
+    const memosLists = memoData.memos.map((memo) => {
       return {
         name: memo.memo.split("\n")[0],
         body: memo.memo,
       };
     });
     if (memoData.memos.length === 0) {
-      throw new Error("メモがありません");
+      console.log("メモがありません");
     }
-    return memoTitles;
+    return memosLists;
   }
 }
 
