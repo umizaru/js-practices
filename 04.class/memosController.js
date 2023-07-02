@@ -10,6 +10,7 @@ class MemosController {
 
   async list() {
     const memoData = await this.memosData.read();
+
     if (memoData.memos.length === 0) {
       console.log("メモがありません");
     }
@@ -61,6 +62,7 @@ class MemosController {
   async append() {
     const memoData = await this.memosData.read();
     const newMemo = await this.#inputRead();
+
     memoData.memos.push(newMemo);
     this.memosData.write(memoData);
     console.log("---書き込みが完了しました---");
