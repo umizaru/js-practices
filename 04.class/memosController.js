@@ -15,8 +15,8 @@ class MemosController {
       console.log("メモがありません");
     }
     memoData.memos.forEach((memo) => {
-      const memosList = memo.memo.split("\n");
-      console.log(memosList[0]);
+      const memosFirstLines = memo.content.split("\n");
+      console.log(memosFirstLines[0]);
     });
   }
 
@@ -76,7 +76,7 @@ class MemosController {
         process.exit(1);
       }
       const newMemo = {
-        memo: inputText,
+        content: inputText,
       };
       return newMemo;
     } catch (error) {
@@ -89,8 +89,8 @@ class MemosController {
     const memoData = await memosData.read();
     const memosLists = memoData.memos.map((memo) => {
       return {
-        name: memo.memo.split("\n")[0],
-        body: memo.memo,
+        name: memo.content.split("\n")[0],
+        body: memo.content,
       };
     });
     if (memoData.memos.length === 0) {
