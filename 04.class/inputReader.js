@@ -6,11 +6,14 @@ class InputReader {
       input: process.stdin,
       output: process.stdout,
     });
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       const lines = [];
       rlInterface.on("line", (line) => lines.push(line));
       rlInterface.on("close", () => {
         resolve(lines.join("\n"));
+      });
+      rlInterface.on("error", (error) => {
+        reject(error);
       });
     });
   }

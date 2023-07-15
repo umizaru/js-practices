@@ -15,16 +15,15 @@ class MemosController {
       console.log("メモがありません");
     }
     memoData.memos.forEach((memo) => {
-      const memosFirstLines = memo.content.split("\n");
-      console.log(memosFirstLines[0]);
+      const memoFirstLines = memo.content.split("\n");
+      console.log(memoFirstLines[0]);
     });
   }
 
   async refer() {
     const memosList = await this.#getMemos(this.memosData);
 
-    const { Select } = enquirer;
-    const prompt = new Select({
+    const prompt = new enquirer.Select({
       type: "select",
       name: "value",
       message: "Choose a memo you want to see:",
@@ -42,8 +41,7 @@ class MemosController {
     const memoData = await this.memosData.read();
     const memosList = await this.#getMemos(this.memosData);
 
-    const { Select } = enquirer;
-    const prompt = new Select({
+    const prompt = new enquirer.Select({
       type: "select",
       name: "value",
       message: "Choose a memo you want to delete:",

@@ -1,4 +1,5 @@
 import { promises as fs } from "fs";
+
 class MemosData {
   constructor() {
     this.memoFilePath = "data/memos.json";
@@ -9,9 +10,14 @@ class MemosData {
       const memoData = await fs.readFile(this.memoFilePath, "utf-8");
       return JSON.parse(memoData);
     } catch (error) {
-      if (error.code === "ENOENT") {
-        await this.#createEmptyData();
-        return { memos: [] };
+      if (error.code) {
+        if (error.code === "ENOENT") {
+          await this.#createEmptyData();
+          return { memos: [] };
+        } else {
+          console.error("予期しないエラーが発生しました");
+          throw error;
+        }
       } else {
         console.error("予期しないエラーが発生しました");
         throw error;
