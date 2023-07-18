@@ -10,14 +10,9 @@ class MemosData {
       const memoData = await fs.readFile(this.memoFilePath, "utf-8");
       return JSON.parse(memoData);
     } catch (error) {
-      if (error.code) {
-        if (error.code === "ENOENT") {
-          await this.#createEmptyData();
-          return { memos: [] };
-        } else {
-          console.error("予期しないエラーが発生しました");
-          throw error;
-        }
+      if (error.code === "ENOENT") {
+        await this.#createEmptyData();
+        return { memos: [] };
       } else {
         console.error("予期しないエラーが発生しました");
         throw error;
