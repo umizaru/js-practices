@@ -15,9 +15,8 @@ class MemosController {
       console.log("メモがありません");
     } else {
       const memosTitleAndBody = await this.#getMemos(this.memosData);
-      const memosTitle = memosTitleAndBody.map((memo) => memo.title);
-      memosTitle.forEach((memoTitle) => {
-        console.log(memoTitle);
+      memosTitleAndBody.forEach((memo) => {
+        console.log(memo.title);
       });
     }
   }
@@ -35,11 +34,11 @@ class MemosController {
       },
     });
 
-    if (Object.keys(memosTitleAndBody).length === 0) {
-      console.log("メモがありません");
-    } else {
+    if (memosTitleAndBody.length !== 0) {
       const memosBody = await prompt.run();
       console.log(memosBody);
+    } else {
+      console.log("メモがありません");
     }
   }
 
@@ -57,13 +56,13 @@ class MemosController {
       },
     });
 
-    if (Object.keys(memosTitleAndBody).length === 0) {
-      console.log("メモがありません");
-    } else {
+    if (memosTitleAndBody.length !== 0) {
       const selectedIndex = await prompt.run();
       inputtedMemos.memos.splice(selectedIndex, 1);
       this.memosData.write(inputtedMemos);
       console.log("---削除が完了しました---");
+    } else {
+      console.log("メモがありません");
     }
   }
 
