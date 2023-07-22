@@ -1,4 +1,3 @@
-import enquirer from "enquirer";
 import { promises as fs } from "fs";
 import InputReader from "./inputReader.js";
 
@@ -23,30 +22,8 @@ class MemosData {
     }
   }
 
-  async append() {
-    const inputtedMemos = await this.read();
-    const newMemo = await this.#inputRead();
-
-    inputtedMemos.memos.push(newMemo);
-    this.#write(inputtedMemos);
-    console.log("---書き込みが完了しました---");
-  }
-
-  async delete() {
-    const inputtedMemos = await this.read();
-
-    const prompt = new enquirer.Select({
-      type: "select",
-      title: "value",
-      message: "Choose a memo you want to delete:",
-      choices: inputtedMemos.memos,
-      result() {
-        return this.index;
-      },
-    });
-
+  async delete(inputtedMemos, selectedIndex) {
     if (inputtedMemos.memos.length !== 0) {
-      const selectedIndex = await prompt.run();
       inputtedMemos.memos.splice(selectedIndex, 1);
       this.#write(inputtedMemos);
       console.log("---削除が完了しました---");
@@ -55,9 +32,22 @@ class MemosData {
     }
   }
 
+  async append(inputtedMemos) {
+    const newMemo = await this.#inputRead();
+
+    inputtedMemos.memos.push(newMemo);
+    this.#write(inputtedMemos);
+    console.log("---書き込みが完了しました---");
+  }
+
   async #createEmptyData() {
     const emptyDataJSON = JSON.stringify({ memos: [] });
     await fs.writeFile(this.memoFilePath, emptyDataJSON);
+  }
+
+  async #write(inputtedMemos) {
+    const memoDataJSON = JSON.stringify(inputtedMemos);
+    await fs.writeFile(this.memoFilePath, memoDataJSON);
   }
 
   async #inputRead() {
@@ -76,11 +66,6 @@ class MemosData {
       console.error("予期しないエラーが発生しました");
       throw error;
     }
-  }
-
-  async #write(inputtedMemos) {
-    const memoDataJSON = JSON.stringify(inputtedMemos);
-    await fs.writeFile(this.memoFilePath, memoDataJSON);
   }
 }
 

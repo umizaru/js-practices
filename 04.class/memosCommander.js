@@ -14,9 +14,9 @@ class MemosCommander {
     } else if (this.option.r) {
       this.controller.refer();
     } else if (this.option.d) {
-      this.data.delete();
+      this.controller.delete();
     } else {
-      this.data.append();
+      this.controller.append();
     }
   }
 }

@@ -40,6 +40,27 @@ class MemosController {
       console.log("メモがありません");
     }
   }
+
+  async delete() {
+    const inputtedMemos = await this.memosData.read();
+
+    const prompt = new enquirer.Select({
+      type: "select",
+      title: "value",
+      message: "Choose a memo you want to delete:",
+      choices: inputtedMemos.memos,
+      result() {
+        return this.index;
+      },
+    });
+    const selectedIndex = await prompt.run();
+    await this.memosData.delete(inputtedMemos, selectedIndex);
+  }
+
+  async append() {
+    const inputtedMemos = await this.memosData.read();
+    await this.memosData.append(inputtedMemos);
+  }
 }
 
 export default MemosController;
