@@ -11,55 +11,83 @@ class MemosController {
   async list() {
     const inputtedMemos = await this.memosData.read();
 
-    if (inputtedMemos.memos.length === 0) {
+    if (inputtedMemos.length === 0) {
       console.log("メモがありません");
-    } else {
-      inputtedMemos.memos.forEach((memo) => {
-        console.log(memo.title);
-      });
+      return;
     }
+
+    inputtedMemos.forEach((memo) => {
+      console.log(memo.title);
+    });
   }
 
   async refer() {
     const inputtedMemos = await this.memosData.read();
 
+    if (inputtedMemos.length === 0) {
+      console.log("メモがありません");
+      return;
+    }
+
     const prompt = new enquirer.Select({
       type: "select",
       title: "value",
       message: "Choose a memo you want to see:",
-      choices: inputtedMemos.memos,
+      choices: inputtedMemos,
       result() {
         return this.focused.body;
       },
     });
 
-    if (inputtedMemos.memos.length !== 0) {
-      const memosBody = await prompt.run();
-      console.log(memosBody);
-    } else {
-      console.log("メモがありません");
-    }
+    const memoBody = await prompt.run();
+    console.log(memoBody);
   }
 
   async delete() {
     const inputtedMemos = await this.memosData.read();
 
+    if (inputtedMemos.length === 0) {
+      console.log("メモがありません");
+      return;
+    }
+
     const prompt = new enquirer.Select({
       type: "select",
       title: "value",
       message: "Choose a memo you want to delete:",
-      choices: inputtedMemos.memos,
+      choices: inputtedMemos,
       result() {
         return this.index;
       },
     });
+
     const selectedIndex = await prompt.run();
-    await this.memosData.delete(inputtedMemos, selectedIndex);
+    this.memosData.delete(selectedIndex);
+    console.log("---削除が完了しました---");
   }
 
   async append() {
-    const inputtedMemos = await this.memosData.read();
-    await this.memosData.append(inputtedMemos);
+    const newMemo = await this.#inputRead();
+    await this.memosData.append(newMemo);
+    console.log("---書き込みが完了しました---");
+  }
+
+  async #inputRead() {
+    try {
+      const inputText = await this.inputReader.read();
+      if (inputText.replace(/\s/g, "") === "") {
+        console.error("文字を入力してください");
+        process.exit(1);
+      }
+      const newMemo = {
+        title: inputText.split("\n")[0],
+        body: inputText,
+      };
+      return newMemo;
+    } catch (error) {
+      console.error("予期しないエラーが発生しました");
+      throw error;
+    }
   }
 }
 

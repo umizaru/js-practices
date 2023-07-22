@@ -1,10 +1,8 @@
 import { promises as fs } from "fs";
-import InputReader from "./inputReader.js";
 
 class MemosData {
   constructor() {
     this.memoFilePath = "data/memos.json";
-    this.inputReader = new InputReader();
   }
 
   async read() {
@@ -14,7 +12,7 @@ class MemosData {
     } catch (error) {
       if (error.code === "ENOENT") {
         await this.#createEmptyData();
-        return { memos: [] };
+        return {};
       } else {
         console.error("予期しないエラーが発生しました");
         throw error;
@@ -22,50 +20,26 @@ class MemosData {
     }
   }
 
-  async delete(inputtedMemos, selectedIndex) {
-    if (inputtedMemos.memos.length !== 0) {
-      inputtedMemos.memos.splice(selectedIndex, 1);
-      this.#write(inputtedMemos);
-      console.log("---削除が完了しました---");
-    } else {
-      console.log("メモがありません");
-    }
+  async delete(selectedIndex) {
+    const inputtedMemos = await this.read();
+    inputtedMemos.splice(selectedIndex, 1);
+    this.#write(inputtedMemos);
   }
 
-  async append(inputtedMemos) {
-    const newMemo = await this.#inputRead();
-
-    inputtedMemos.memos.push(newMemo);
+  async append(newMemo) {
+    const inputtedMemos = await this.read();
+    inputtedMemos.push(newMemo);
     this.#write(inputtedMemos);
-    console.log("---書き込みが完了しました---");
   }
 
   async #createEmptyData() {
-    const emptyDataJSON = JSON.stringify({ memos: [] });
+    const emptyDataJSON = JSON.stringify([]);
     await fs.writeFile(this.memoFilePath, emptyDataJSON);
   }
 
   async #write(inputtedMemos) {
     const memoDataJSON = JSON.stringify(inputtedMemos);
     await fs.writeFile(this.memoFilePath, memoDataJSON);
-  }
-
-  async #inputRead() {
-    try {
-      const inputText = await this.inputReader.read();
-      if (inputText.replace(/\s/g, "") === "") {
-        console.error("文字を入力してください");
-        process.exit(1);
-      }
-      const newMemo = {
-        title: inputText.split("\n")[0],
-        body: inputText,
-      };
-      return newMemo;
-    } catch (error) {
-      console.error("予期しないエラーが発生しました");
-      throw error;
-    }
   }
 }
 
