@@ -21,15 +21,15 @@ class MemosData {
   }
 
   async delete(selectedIndex) {
-    const inputtedMemos = await this.read();
-    inputtedMemos.splice(selectedIndex, 1);
-    this.#write(inputtedMemos);
+    const memos = await this.read();
+    memos.splice(selectedIndex, 1);
+    this.#write(memos);
   }
 
   async append(newMemo) {
-    const inputtedMemos = await this.read();
-    inputtedMemos.push(newMemo);
-    this.#write(inputtedMemos);
+    const memos = await this.read();
+    memos.push(newMemo);
+    this.#write(memos);
   }
 
   async #createEmptyData() {
@@ -37,8 +37,8 @@ class MemosData {
     await fs.writeFile(this.memoFilePath, emptyDataJSON);
   }
 
-  async #write(inputtedMemos) {
-    const memoDataJSON = JSON.stringify(inputtedMemos);
+  async #write(memos) {
+    const memoDataJSON = JSON.stringify(memos);
     await fs.writeFile(this.memoFilePath, memoDataJSON);
   }
 }
