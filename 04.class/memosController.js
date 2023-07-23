@@ -9,22 +9,22 @@ class MemosController {
   }
 
   async list() {
-    const inputtedMemos = await this.memosData.read();
+    const memos = await this.memosData.read();
 
-    if (inputtedMemos.length === 0) {
+    if (memos.length === 0) {
       console.log("メモがありません");
       return;
     }
 
-    inputtedMemos.forEach((memo) => {
+    memos.forEach((memo) => {
       console.log(memo.title);
     });
   }
 
   async refer() {
-    const inputtedMemos = await this.memosData.read();
+    const memos = await this.memosData.read();
 
-    if (inputtedMemos.length === 0) {
+    if (memos.length === 0) {
       console.log("メモがありません");
       return;
     }
@@ -33,7 +33,7 @@ class MemosController {
       type: "select",
       title: "value",
       message: "Choose a memo you want to see:",
-      choices: inputtedMemos,
+      choices: memos,
       result() {
         return this.focused.body;
       },
@@ -44,9 +44,9 @@ class MemosController {
   }
 
   async delete() {
-    const inputtedMemos = await this.memosData.read();
+    const memos = await this.memosData.read();
 
-    if (inputtedMemos.length === 0) {
+    if (memos.length === 0) {
       console.log("メモがありません");
       return;
     }
@@ -55,7 +55,7 @@ class MemosController {
       type: "select",
       title: "value",
       message: "Choose a memo you want to delete:",
-      choices: inputtedMemos,
+      choices: memos,
       result() {
         return this.index;
       },
